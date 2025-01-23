@@ -1,8 +1,8 @@
 # Jacob Bradley
 
-## 📂 Repository: 5243 Advanced Algorithms  
+## 📂 Repository: 5243 Algorithm Analysis  
 ### 🚀 Purpose:  
-Group of small projects covering advanced algorithms.
+Group of small projects covering various algorithms.
 
 ---
 
