@@ -12,7 +12,7 @@ Group of small projects covering advanced algorithms.
 ---
 
 ### 📜 Table of Contents:
-1. [Projects](#Assignments)
+1. [Projects](./Assignments/)
 
 ---
 
