@@ -1,35 +1,42 @@
-#include <fstream>
 #include <iostream>
-#include <string>
 #include <vector>
+#include <string>
+#include <fstream>
+#include <cmath>
 
 using namespace std;
-
-struct Node {
+struct Node
+{
     int data;
     Node *left;
     Node *right;
-
-    Node(int x) {
+    Node(int x)
+    {
         data = x;
         left = right = nullptr;
     }
 };
 
-class GraphvizBST {
+class GraphvizBST
+{
 public:
-    static void saveDotFile(const std::string &filename, const std::string &dotContent) {
+    static void saveDotFile(const std::string &filename, const std::string &dotContent)
+    {
         std::ofstream outFile(filename);
-        if (outFile.is_open()) {
+        if (outFile.is_open())
+        {
             outFile << dotContent;
             outFile.close();
             std::cout << "DOT file saved: " << filename << std::endl;
-        } else {
+        }
+        else
+        {
             std::cerr << "Error: Could not open file " << filename << std::endl;
         }
     }
 
-    static std::string generateDot(const Node *root) {
+    static std::string generateDot(const Node *root)
+    {
         std::string dot = "digraph BST {\n";
         dot += "    node [fontname=\"Arial\"];\n";
         dot += generateDotHelper(root);
@@ -38,22 +45,29 @@ public:
     }
 
 private:
-    static std::string generateDotHelper(const Node *node) {
+    static std::string generateDotHelper(const Node *node)
+    {
         if (!node)
             return "";
         std::string result;
-        if (node->left) {
+        if (node->left)
+        {
             result += "    " + std::to_string(node->data) + " -> " + std::to_string(node->left->data) + " [label=\"L\"];\n";
             result += generateDotHelper(node->left);
-        } else {
+        }
+        else
+        {
             std::string nullNode = "nullL" + std::to_string(node->data);
             result += "    " + nullNode + " [shape=point];\n";
             result += "    " + std::to_string(node->data) + " -> " + nullNode + ";\n";
         }
-        if (node->right) {
+        if (node->right)
+        {
             result += "    " + std::to_string(node->data) + " -> " + std::to_string(node->right->data) + " [label=\"R\"];\n";
             result += generateDotHelper(node->right);
-        } else {
+        }
+        else
+        {
             std::string nullNode = "nullR" + std::to_string(node->data);
             result += "    " + nullNode + " [shape=point];\n";
             result += "    " + std::to_string(node->data) + " -> " + nullNode + ";\n";
@@ -62,98 +76,150 @@ private:
     }
 };
 
-class Bst {
+class Bst
+{
     Node *root;
 
-    void _print(Node *subroot) {
-        if (!subroot) {
-            return;
-        } else {
+    void _print(Node *subroot)
+    {
+        if (subroot)
+        {
             _print(subroot->left);
             cout << subroot->data << " ";
             _print(subroot->right);
         }
     }
-    void _insert(Node *&subroot, int x) {
-        if (!subroot) { // if(root == nullptr)
+
+    void _insert(Node *&subroot, int x)
+    {
+        if (!subroot)
+        {
             subroot = new Node(x);
-        } else {
-            if (x < subroot->data) {
+        }
+        else
+        {
+            if (x < subroot->data)
+            {
                 _insert(subroot->left, x);
-            } else {
+            }
+            else
+            {
                 _insert(subroot->right, x);
             }
         }
     }
-    int _ipl(Node *root, int depth = 0) {
+
+    void _delete(Node *&root, int key)
+    {
         if (!root)
-            return 0; // Base case: Empty subtree contributes 0 to IPL
+            return;
+        if (key < root->data)
+        {
+            _delete(root->left, key);
+        }
+        else if (key > root->data)
+        {
+            
+            _delete(root->right, key);
+
+        }
+        else if (!root->left || !root->right)
+        {
+            Node *temp = root->left ? root->left : root->right;
+            if (!temp)
+            {
+                temp = root;
+                root = nullptr;
+            }
+            else
+            {
+                *root = *temp;
+            }
+            delete temp;
+        }
+        else
+        {
+            Node *successor = _findMin(root->right);
+            root->data = successor->data;
+            _delete(root->right, successor->data);
+        }
+    }
+
+    Node *_findMin(Node *node) //function to assist deletion
+    {
+        while (node->left)
+            node = node->left;
+        return node;
+    }
+
+    int _ipl(Node *root, int depth = 0)
+    {
+        if (!root)
+            return 0; //base case
         return depth + _ipl(root->left, depth + 1) + _ipl(root->right, depth + 1);
     }
 
 public:
-    Bst() { root = nullptr; }
-    void insert(int x) { _insert(root, x); }
-    bool search(int key) { return 0; }
-    void print() { _print(root); }
-    void saveDotFile(const std::string &filename) {
+    Bst()
+    {
+        root = nullptr;
+    }
+
+    void insert(int x)
+    {
+        _insert(root, x);
+    }
+
+    void print()
+    {
+        _print(root);
+    }
+
+    void deleteNode(int key)
+    {
+        _delete(root, key);
+    }
+
+    void saveDotFile(const std::string &filename)
+    {
         std::string dotContent = GraphvizBST::generateDot(root);
         GraphvizBST::saveDotFile(filename, dotContent);
     }
 
-    /**
-     * Computes the Internal Path Length (IPL) of a Binary Search Tree (BST).
-     *
-     * Definition:
-     * The Internal Path Length (IPL) of a BST is the sum of the depths of all nodes in the tree.
-     * The depth of a node is the number of edges from the root to that node.
-     *
-     * Example:
-     *        10
-     *       /  \
-     *      5    15
-     *     / \     \
-     *    2   7    20
-     *
-     * IPL = (depth of 10) + (depth of 5) + (depth of 15) + (depth of 2) + (depth of 7) + (depth of 20)
-     *     = 0 + 1 + 1 + 2 + 2 + 2 = 8
-     *
-     * @param root Pointer to the root node of the BST.
-     * @param depth Current depth of the node (default is 0 for the root call).
-     * @return The sum of depths of all nodes (Internal Path Length).
-     */
-    int ipl() {
+    int ipl()
+    {
         return _ipl(root);
     }
 };
 
-bool unique_value(int *arr, int n, int x) {
-    for (int i = 0; i < n; i++) {
-        if (arr[i] == x) {
+bool unique_val(int *arr, int n, int x){
+    for(int i = 0; i < n; i++){
+        if(arr[i] == x){
             return false;
         }
     }
     return true;
 }
 
-int main() {
-    Bst tree;
-    int root = pow(2, 15) / 2;
-    int max = pow(2, 15) - 1;
-    vector<int> arr;
-    arr.push_back(root);
-    tree.insert(root);
-    for (int i = 1; i < 5000; i++) {
+int main(){
+    Bst tree; //creating object of class Bst
+    int root = pow(2, 15) / 2; //root of the tree
+    int max = pow(2, 15) - 1; //maximum value of the tree
+    vector<int> arr; //vector to store the values of the tree
+    arr.push_back(root); //pushing the root value to the vector
+    tree.insert(root); //inserting the root value to the tree
+    for (int i = 1; i < 5000; i++){
         int r = rand() % max;
-        while (!unique_value(arr.data(), arr.size(), r)) {
+        while (!unique_val(arr.data(), arr.size(), r)){
             r = rand() % max;
-        }
-        tree.insert(r);
-        arr.push_back(r);
+        } //generating random values and checking if they are unique
+        tree.insert(r); //inserting the random value to the tree
+        tree.deleteNode(r);
+        arr.push_back(r); //pushing the random value to the vector
     }
-
-    tree.print();
-    tree.saveDotFile("bst_snapshot.dot");
+    tree.print(); //printing the tree
+    tree.saveDotFile("bst_snapshot.dot"); //saving the tree to a dot file
+    
 
     Bst tree2;
     tree2.insert(10);
@@ -162,5 +228,6 @@ int main() {
     tree2.insert(2);
     tree2.insert(7);
     tree2.insert(20);
-    cout << "Internal Path Length: " << tree2.ipl() << endl;
+    
+    cout << "IPL of the tree is: " << tree2.ipl() << endl;
 }
