@@ -19,7 +19,7 @@ Group of small projects covering various algorithms.
 ### 📊 Projects
 | **Project Name**      | **Description**                     | **Status**        |
 |------------------------|-------------------------------------|-------------------|
-| **[BST Deletions](./Assignments/A03/)** | Overview on how to implement BST deletion operations | ✅ Completed (2/4)   |
+| **[A03 BST Deletions](./Assignments/A03/)** | Overview on how to implement BST deletion operations | ✅ Completed   |
 | **Placeholder Project** | Stay tuned for updates!            | 🕐 Coming Soon   |
 
 ---
