@@ -20,6 +20,6 @@ Group of small projects covering various algorithms.
 | **Assignment/Project Name**      | **Description**                     | **Status**        |
 |------------------------|-------------------------------------|-------------------|
 | **[A03 BST Deletions](./Assignments/A03/)** | Overview on how to implement BST deletion operations | ✅ Completed   |
-| **[Project 1: Asym/Sym Deletions](./Assignments/P1/)** | Asymmetric and Symmetric Deletion BST implementation            | ✅ Completed   |
+| **[Project 1: Asym/Sym Deletions](./Projects/P1/)** | Asymmetric and Symmetric Deletion BST implementation            | ✅ Completed   |
 
 ---
