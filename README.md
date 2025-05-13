@@ -21,5 +21,6 @@ Group of small projects covering various algorithms.
 |------------------------|-------------------------------------|-------------------|
 | **[A03 BST Deletions](./Assignments/A03/)** | Overview on how to implement BST deletion operations | ✅ Completed   |
 | **[Project 1: Asym/Sym Deletions](./Projects/P1/)** | Asymmetric and Symmetric Deletion BST implementation            | ✅ Completed   |
+|**[Wavelet Tree Presentation](./Assignments/Wavelet%20Trees/presentation.md)** | Short Presentation & Info Covering Wavelet Trees | ✅ Completed |
 
 ---
